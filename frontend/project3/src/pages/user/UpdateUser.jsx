@@ -13,7 +13,6 @@ const UpdateUser = () => {
   const navigate = useNavigate();
   const {register,reset,handleSubmit} = useForm({
     defaultValues: {
-      id: user.id,
       username : user.username,
       email: user.email,
       password: user.password
@@ -23,9 +22,7 @@ const UpdateUser = () => {
 
 
   const updateDetails = (data)=>{
-    //console.log("user Id in update:",user.id);
-    dispatch(asyncUpdateUser(user.id,data));
-    //console.log("updated the user details");
+    dispatch(asyncUpdateUser(user, data)); // Pass the full user object
     navigate('/profile');
   }
 
