@@ -26,8 +26,11 @@ export const asyncLogoutUser = ()=>async(dispatch,getState)=>{
 export const asyncLoginUser = (user)=> async(dispatch,getState)=>{
     try {
         const {data} = await axios.get( `/users?username=${user.username}&password=${user.password}`);
-        localStorage.setItem("user",JSON.stringify(data[0]));
-        dispatch(loaduser(data[0]));
+        const userObj = data[0];
+        // If backend returns id, map it to _id for consistency
+        if (userObj && userObj.id) userObj._id = userObj.id;
+        localStorage.setItem("user",JSON.stringify(userObj));
+        dispatch(loaduser(userObj));
     } catch (error) {
         console.log(error);
     }
@@ -43,11 +46,18 @@ export const asyncRegisterUser = (user)=> async(dispatch,getState)=>{
     }
 }
 
-export const asyncUpdateUser = (id,user) => async(dispatch,getState)=>{
+export const asyncUpdateUser = (userObj, userData) => async(dispatch, getState) => {
     try {
-        console.log("id: ",id);
-        console.log("user Details: ",user);
-        
+        const id = userObj?._id || userObj?.id;
+        if (!id) {
+            console.error("User id is missing!");
+            return;
+        }
+        console.log("id: ", id);
+        console.log("user Details: ", userData);
+        const { data } = await axios.patch(`/users/${id}`, userData);
+        localStorage.setItem("user", JSON.stringify(data));
+        dispatch(loaduser(data));
     } catch (error) {
         console.log(error);
     }
