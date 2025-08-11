@@ -7,7 +7,7 @@ const initialState = {
 const cartSlice = createSlice({
     name: "cart",
     initialState,
-    reducer: {
+    reducers: {
         loadCart: (state,actions)=>{
             state.data = actions.payload
         }

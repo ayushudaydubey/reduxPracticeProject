@@ -2,17 +2,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { asyncLoginUser } from "../store/actions/UserActions";
 
 const Login = () => {
   const { register, handleSubmit, reset } = useForm();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const submitHandler = (user) => {
-    dispatch(asyncLoginUser);
+    dispatch(asyncLoginUser(user));
     console.log(user);
     //localStorage.setItem("users",JSON.stringify(user));
+    navigate('/products');
     reset();
   };
 
